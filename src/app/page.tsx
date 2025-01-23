@@ -7,8 +7,8 @@ export default function Board() {
   const [xIsNext, setXIsNext] = useState(true);
 
   function handleClick(i) {
-    // return early if square is already filled
-    if (squares[i]) {
+    // return early if square is already filled or one player has won the game
+    if (squares[i] || calculateWinner(squares)) {
       return;
     }
     // Create a copy of the current array representing the game state
@@ -48,4 +48,24 @@ function Square( {value, onSquareClick} ) {
   return (
     <button className="square" onClick={onSquareClick}>{value}</button>
   )
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
 }
