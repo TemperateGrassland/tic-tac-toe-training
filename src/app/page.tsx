@@ -7,6 +7,10 @@ export default function Board() {
   const [xIsNext, setXIsNext] = useState(true);
 
   function handleClick(i) {
+    // return early if square is already filled
+    if (squares[i]) {
+      return;
+    }
     // Create a copy of the current array representing the game state
     const nextSquares = squares.slice();
     if (xIsNext) {
