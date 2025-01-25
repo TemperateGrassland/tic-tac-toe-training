@@ -10,44 +10,48 @@ export default function Game() {
   // The game board is a collection of 9 squares.
   // Each square has a value of either 'X' or 'O'.
   // The game board tracks whose go it is next, the history of the moves, the current game state  and the current move.
-  // 
-  const [xIsNext, setXIsNext] = useState(true);
+  // The history of the game state and the current state are the main data arrays involved in keeping track of the game
+  
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
   const [currentMove, setCurrentMove] = useState(0);
+  const xIsNext = currentMove % 2 === 0;
+  const currentSquares = history[currentMove];
 
-function handlePlay(nextSquares) {
-  // Called from the Board when the square is clicked, input is the updated game state from the after the current move has been played 
-  console.log(currentMove);
-  console.log(history) 
-  // array slice operations 'end' parameter is exclusive
-  // Get the initial game state and add the updated game state to nextHistory
-  const nexthistory = [...history.slice(0, currentMove + 1), nextSquares];
-  setHistory(nexthistory);
-  // set current move number based on the nextHistory array length 
-  setCurrentMove(nexthistory.length - 1);
-  // Flip the boolean indicating whose turn it is
-  setXIsNext(!xIsNext);
-}
 
-function jumpTo(nextMove) {
-  setCurrentMove(nextMove);
-  setXIsNext(nextMove % 2 === 0);
-}
-
-const moves = history.map((squares, move) => {
-  let description;
-  if (move > 0) {
-    description = 'Go to move #' + move;
-  } else {
-    description = 'Go to game start';
+  function handlePlay(nextSquares) {
+    // Called from the Board when the square is clicked, input is the updated game state from the after the current move has been played 
+    console.log(currentMove);
+    console.log(history) 
+    // array slice operations 'end' parameter is exclusive
+    // Get the initial game state and add the updated game state to nextHistory
+    const nexthistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nexthistory);
+    // set current move number based on the nextHistory array length 
+    setCurrentMove(nexthistory.length - 1);
+    // Flip the boolean indicating whose turn it is
   }
-  return (
-    <li key={move}>
-      <button onClick={() => jumpTo(move)}>{description}</button>
-    </li>
-  );
-});
+
+  function jumpTo(nextMove) {
+    // Called from the list of moves, input is the move number to jump to
+    // set the current move to whatever the user specified
+    // How does the jumpTo function re-render the board?
+    setCurrentMove(nextMove);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+        {/* When the button for the relevant game state is clicked, jumpTo is called */}
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
 
   return (
     <div className="game">
@@ -82,6 +86,7 @@ function Board({xIsNext, squares, onPlay}) {
     } else {
       nextSquares[i] = 'O';
     }
+    // Trigger a re-render of the Game (and all other) component(s).
     onPlay(nextSquares);
   }
 
