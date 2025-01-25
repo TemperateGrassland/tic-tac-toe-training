@@ -1,0 +1,40 @@
+<mxfile host="Electron" modified="2025-01-25T16:57:18.227Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.199 Electron/28.1.2 Safari/537.36" etag="jOgnaKyEPcBuxkfDHXiN" version="22.1.18" type="device">
+  <diagram name="Page-1" id="rI43kL5zH7joXHik_Iji">
+    <mxGraphModel dx="681" dy="481" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-2" value="GAME" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-7" value="&lt;b&gt;Update state with onPlay&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="b8KNOfSvRbDGAjvHBMrX-3" target="b8KNOfSvRbDGAjvHBMrX-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="270" />
+              <mxPoint x="470" y="210" />
+              <mxPoint x="440" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-3" value="BOARD:&lt;br&gt;Checks if the square is already filled or there is a winner, if not to both then create new game state and pass to board" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="280" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-8" value="&lt;b&gt;Passes user input&amp;nbsp; via onClick&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="b8KNOfSvRbDGAjvHBMrX-4" target="b8KNOfSvRbDGAjvHBMrX-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-4" value="SQUARE" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="320" y="505" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-5" value="State" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-10" value="Click on one square" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="b8KNOfSvRbDGAjvHBMrX-9" target="b8KNOfSvRbDGAjvHBMrX-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b8KNOfSvRbDGAjvHBMrX-9" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="515" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
