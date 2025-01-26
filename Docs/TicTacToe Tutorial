@@ -1,0 +1,11 @@
+TicTacToe Tutorial
+
+### 26/01/25
+
+Add a toggle button that will sort the moves list into ascending or descending order:
+- create a new state variable to keep track of the desired ordering
+- move the move list into a component
+- create a button that when click will flip the value of the state variable and trigger a re-render of the list using the desired outcome.
+- default ordering of list is ascending so set var to true
+- when clicked, change the var to false and sort the list in descending order and re-render.
+

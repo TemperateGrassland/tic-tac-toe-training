@@ -14,6 +14,8 @@ export default function Game() {
 
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
+  const [isAscendingOrder, setIsAscendingOrder] = useState(true);
+
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
@@ -25,6 +27,7 @@ export default function Game() {
     // array slice operations 'end' parameter is exclusive
     // Get the initial game state and add the updated game state to nextHistory
     const nexthistory = [...history.slice(0, currentMove + 1), nextSquares];
+    console.log(nexthistory);
     setHistory(nexthistory);
     // set current move number based on the nextHistory array length 
     setCurrentMove(nexthistory.length - 1);
@@ -38,7 +41,15 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
+  function sortResults() {
+    // sort the list of moves made by ascending or descending order
+
+    setIsAscendingOrder(!isAscendingOrder);
+  }
+
   const moves = history.map((squares, move) => {
+    console.log("move", move);
+    console.log("squares", squares);
     let description;
     if (move === currentMove) {
       return(
@@ -50,6 +61,8 @@ export default function Game() {
     } else {
       description = 'Go to game start';
     }
+
+    
     return (
       <li key={move}>
         {/* When the button for the relevant game state is clicked, jumpTo is called */}
@@ -59,6 +72,7 @@ export default function Game() {
   });
 
   return (
+    <>
     <div className="game">
       <div className="game-board">
         {/* Pass only one game state to be rendered by the board - the current game state
@@ -67,10 +81,25 @@ export default function Game() {
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <MoveList moves={moves} isAscendingOrder={isAscendingOrder}/>
+      </div>
+      <div className="order-button">
+        <button onClick={() => sortResults()}>{'Change the order of the moves'}</button>
       </div>
     </div>
+    </>
   );
+}
+
+function MoveList({moves, isAscendingOrder}) {
+  if (isAscendingOrder) { 
+    return (
+      <ol>{moves}</ol>
+    )
+  return (
+    <ol>{moves}</ol>
+  );
+}
 }
 
 
@@ -125,6 +154,7 @@ function Board({xIsNext, squares, onPlay}) {
   }
 
   return (
+    // Make edits to the board UI here
     <>
       {/* Display the game status */}
       <div className="status">{status}</div>
