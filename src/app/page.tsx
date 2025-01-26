@@ -11,7 +11,7 @@ export default function Game() {
   // Each square has a value of either 'X' or 'O'.
   // The game board tracks whose go it is next, the history of the moves, the current game state  and the current move.
   // The history of the game state and the current state are the main data arrays involved in keeping track of the game
-  
+
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
@@ -40,6 +40,11 @@ export default function Game() {
 
   const moves = history.map((squares, move) => {
     let description;
+    if (move === currentMove) {
+      return(
+        <p>You are at move #{currentMove}</p>
+      ); 
+    } 
     if (move > 0) {
       description = 'Go to move #' + move;
     } else {
