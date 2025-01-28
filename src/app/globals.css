@@ -71,6 +71,37 @@ body {
   width: 34px;
 }
 
+/* Winner Square Style */
+.square-winner {
+  background: #fff; /* Same background as .square */
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+
+  /* Glowing Effect */
+  color: red; /* Text colour for the winner square */
+  box-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px gold; /* Glow effect */
+  animation: glow 1s infinite alternate; /* Animate the glow */
+}
+
+/* Optional glow animation for pulsating effect */
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px gold;
+  }
+  to {
+    box-shadow: 0 0 20px gold, 0 0 30px gold;
+  }
+}
+
 .board-row:after {
   clear: both;
   content: '';

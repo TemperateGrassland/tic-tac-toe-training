@@ -1,5 +1,6 @@
 "use client"
 
+import next from "next";
 import { useState } from "react";
 
 // Next JS will render the export default function in page.tsx
@@ -15,19 +16,24 @@ export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const [isAscendingOrder, setIsAscendingOrder] = useState(true);
+  const [isDrawer, setIsDrawer] = useState(false);
 
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const winnerData = calculateWinner(currentSquares);
+  const winningSquares = winnerData ? winnerData.winningSquares : [];
+
 
 
   function handlePlay(nextSquares) {
     // Called from the Board when the square is clicked, input is the updated game state from the after the current move has been played 
-    console.log(currentMove);
-    console.log(history) 
-    // array slice operations 'end' parameter is exclusive
+    // console.log(currentMove);    // array slice operations 'end' parameter is exclusive
     // Get the initial game state and add the updated game state to nextHistory
+    if (history.length === 9)  {
+      setIsDrawer(true);
+    }
     const nexthistory = [...history.slice(0, currentMove + 1), nextSquares];
-    console.log(nexthistory);
+    // console.log(nexthistory);
     setHistory(nexthistory);
     // set current move number based on the nextHistory array length 
     setCurrentMove(nexthistory.length - 1);
@@ -42,34 +48,26 @@ export default function Game() {
   }
 
   function sortResults() {
-    // sort the list of moves made by ascending or descending order
-
+    // use the '!' operator to flip the value of the boolean
     setIsAscendingOrder(!isAscendingOrder);
   }
 
   const moves = history.map((squares, move) => {
-    console.log("move", move);
-    console.log("squares", squares);
-    let description;
-    if (move === currentMove) {
-      return(
-        <p>You are at move #{currentMove}</p>
-      ); 
-    } 
-    if (move > 0) {
-      description = 'Go to move #' + move;
-    } else {
-      description = 'Go to game start';
-    }
-
-    
+    const description = move > 0 ? `Go to move #${move}` : `Go to game start`;  
     return (
       <li key={move}>
         {/* When the button for the relevant game state is clicked, jumpTo is called */}
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        <button onClick={() => jumpTo(move)}>
+          {move === currentMove ? `Current: ${description}` : description}
+        </button>
       </li>
     );
   });
+
+  // Does this need to use the spread syntax to access the moves?
+  // Or can it use the moves array directly?
+  // Spread syntax will avoid mutating the original array and avoid any side-effects when re-using the original moves array
+  const sortedMoves = isAscendingOrder ? moves : [...moves].reverse();
 
   return (
     <>
@@ -78,13 +76,16 @@ export default function Game() {
         {/* Pass only one game state to be rendered by the board - the current game state
         The board also accepts the next user var in order to display it 
         onPlay is a callback function to update the game state by passing the function to the board and then calling that function to update the state values stored in the Game*/}
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} isWinner={winningSquares} isDraw={isDrawer} />
       </div>
       <div className="game-info">
-        <MoveList moves={moves} isAscendingOrder={isAscendingOrder}/>
+        <MoveList moves={sortedMoves} isAscendingOrder={isAscendingOrder}/>
+      </div>
+      <div>
+        <MoveLocation history={history} move={currentMove}/>
       </div>
       <div className="order-button">
-        <button onClick={() => sortResults()}>{'Change the order of the moves'}</button>
+        <button onClick={() => sortResults()}>{'Change the order of the moves list'}</button>
       </div>
     </div>
     </>
@@ -92,27 +93,50 @@ export default function Game() {
 }
 
 function MoveList({moves, isAscendingOrder}) {
-  if (isAscendingOrder) { 
-    return (
-      <ol>{moves}</ol>
-    )
+  return moves;
+}
+
+function MoveLocation({
+  history,
+  move,
+}: {
+  history: Array<Array<string | null>>;
+  move: number;
+}) {
   return (
-    <ol>{moves}</ol>
+    <div>
+      {history.map((boardState, moveIndex) => {
+        const isCurrent = moveIndex === move; // Check if this is the current move
+        return (
+          <div
+            key={moveIndex}
+            style={{
+              fontWeight: isCurrent ? "bold" : "normal", // Highlight the current move
+            }}
+          >
+            <p>Move {moveIndex}:</p>
+            <pre>{JSON.stringify(boardState, null, 2)}</pre>
+          </div>
+        );
+      })}
+    </div>
   );
 }
-}
 
 
-function Board({xIsNext, squares, onPlay}) {
+function Board({xIsNext, squares, onPlay, isWinner, isDraw}) {
   function handleClick(i) {
     // Handles the click of a square and checks if there is a winnner, copies the game state and updates the game state
     // Calls function to handle the updates to the state stored in the Game
+    
 
 
     // return early if square is already filled or one player has won the game
     if (squares[i] || calculateWinner(squares)) {
       return;
-    }
+    } 
+
+  
     // Create a copy of the current array representing the game state
     const nextSquares = squares.slice();
     if (xIsNext) {
@@ -123,14 +147,20 @@ function Board({xIsNext, squares, onPlay}) {
     // Trigger a re-render of the Game (and all other) component(s).
     onPlay(nextSquares);
   }
-
-    const winner = calculateWinner(squares);
     let status;
+    const winner = calculateWinner(squares);
+
+    
+    
     if (winner) {
-      status = 'Winner: ' + winner;
+      status = 'Winner: ' + winner.winner;
     } else {
       status = 'Next player: ' + (xIsNext ? 'X' : 'O');
     }
+
+    if (isDraw) {
+      status = "It is a draw(er) - play again!";
+    }    
   
   // Dynamically create rows and squares using loops
   const grid = [];
@@ -143,6 +173,7 @@ function Board({xIsNext, squares, onPlay}) {
           key={index}
           value={squares[index]}
           onSquareClick={() => handleClick(index)}
+          isWinner={isWinner.includes(index)}
         />
       );
     }
@@ -165,9 +196,9 @@ function Board({xIsNext, squares, onPlay}) {
 }
 
 
-function Square({value, onSquareClick}) {
+function Square({value, onSquareClick, isWinner}) {
   return (
-    <button className="square" onClick={onSquareClick}>{value}</button>
+    <button className={`square ${isWinner ? "square-winner" : ""}`} onClick={onSquareClick}>{value}</button>
   );
 }
 
@@ -185,7 +216,11 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      // highlight the winning squares when someone wins
+      // 1. highlight one square
+      // 2. use the vars defined above to light up the rest of them!
+
+      return { winner: squares[a], winningSquares: [a, b, c] }; 
     }
   }
   return null;

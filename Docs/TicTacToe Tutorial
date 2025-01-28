@@ -9,3 +9,16 @@ Add a toggle button that will sort the moves list into ascending or descending o
 - default ordering of list is ascending so set var to true
 - when clicked, change the var to false and sort the list in descending order and re-render.
 
+Current flow
+
+- user hits a square button
+- onclick check for a winner or is square is filled in and then calls handle in play
+- handle play creates a new game state and saves it and sets the move - this triggers a re-render of the game components because these two vars belong to the Game component's state.
+- moves var is created which consists of a list of <li> with the key $move.
+	= how can I access the key in the rendered lists?
+	= how can I pass the list into the Move
+
+
+## 28/01/2025
+
+
